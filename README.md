@@ -123,12 +123,12 @@ Here we have defined the motion Task, we are using FreeRTOS in this program to r
 
 Now let's start the **app_main()** function.
 
-`gpio_pad_select_gpio(LED);
-gpio_set_direction(LED, GPIO_MODE_OUTPUT);
-gpio_pad_select_gpio(MOTION_PIN);
-gpio_set_direction(MOTION_PIN, GPIO_MODE_INPUT);
-gpio_pad_select_gpio(OUTPUT_GPIO);
-gpio_set_direction(OUTPUT_GPIO, GPIO_MODE_OUTPUT);`
+    `gpio_pad_select_gpio(LED);
+    gpio_set_direction(LED, GPIO_MODE_OUTPUT);
+    gpio_pad_select_gpio(MOTION_PIN);
+    gpio_set_direction(MOTION_PIN, GPIO_MODE_INPUT);
+    gpio_pad_select_gpio(OUTPUT_GPIO);
+    gpio_set_direction(OUTPUT_GPIO, GPIO_MODE_OUTPUT);`
 
 Here we are configuring the GPIO Pins and selecting the INPUT and OUTPUT Modes for the pins that we will be using, for the Motion sensor we will be using the INPUT mode because the sensot will only take the input from the surrounding and update it on the app and for LEDs we are using OUTPUT mode because we want to take the action on the board itself and obviously, the LED is an OUTPUT device.
 
@@ -148,13 +148,13 @@ This is FreeRTOS Task create function that will create a task and pin it to a sp
 
 Till Now we've defined all the basic things and now it is time to start working on the ESP-Rainmaker.
 
-`esp_err_t err = nvs_flash_init();
-if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND)
-{
-ESP_ERROR_CHECK(nvs_flash_erase());
-err = nvs_flash_init(); 
-}
-ESP_ERROR_CHECK(err);`
+`   esp_err_t err = nvs_flash_init();
+    if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND)
+    {
+    ESP_ERROR_CHECK(nvs_flash_erase());
+    err = nvs_flash_init(); 
+    }
+    ESP_ERROR_CHECK(err);`
 
 Here we need to initialise the Non Volatile Stograge partition to store our Wifi Credentials and if we receive any type of error then it will erase the complete NVS and initialise it again.
 
@@ -166,11 +166,12 @@ With this fucntion we are initialising the Wifi and this process must be done be
 
 Now we need to define the configuration for ESP-Rainmaker, this config is used to synchronise the time. If it is true it will fetch the time from SNTP (Simple Network Time Protocol) before initializing the ESP-Rainmaker.
 
-` esp_rmaker_node_t *node = esp_rmaker_node_init(&rainmaker_cfg, "ESP RainMaker Motion Sensor", "Motion Sensor");
-if (!node){
-ESP_LOGE(TAG, "Could not initialise node. Aborting!!!");
-vTaskDelay(5000 / portTICK_PERIOD_MS); abort();
-} `
+    `esp_rmaker_node_t *node = esp_rmaker_node_init(&rainmaker_cfg, "ESP RainMaker Motion Sensor", "Motion Sensor");
+    if (!node)
+    {
+    ESP_LOGE(TAG, "Could not initialise node. Aborting!!!");
+    vTaskDelay(5000 / portTICK_PERIOD_MS); abort();
+    }`
 
 Now we need to initialise the Node so that the Rainmaker Mobile app will recognize our device. It is used to define the Name and type of our device.
 
@@ -183,15 +184,15 @@ Used this fucntion to create a new device
 
 Here We've defined the parameters and it's properties 
 
-`esp_rmaker_device_add_param(motion_sensor_device, Motion_Parameter);
-esp_rmaker_device_assign_primary_param(motion_sensor_device, Motion_Parameter);
-esp_rmaker_node_add_device(node, motion_sensor_device);`
+    `esp_rmaker_device_add_param(motion_sensor_device, Motion_Parameter);
+    esp_rmaker_device_assign_primary_param(motion_sensor_device, Motion_Parameter);
+    esp_rmaker_node_add_device(node, motion_sensor_device);`
 
 Assigned Parameter to the newly created device and Added the device to the Node.
 
-`switch_device = esp_rmaker_switch_device_create("Switch", NULL, DEFAULT_POWER);
-esp_rmaker_device_add_cb(switch_device, write_cb, NULL);
-esp_rmaker_node_add_device(node, switch_device);`
+    `switch_device = esp_rmaker_switch_device_create("Switch", NULL, DEFAULT_POWER);
+    esp_rmaker_device_add_cb(switch_device, write_cb, NULL);
+    esp_rmaker_node_add_device(node, switch_device);`
 
 Here we have created two device and defined their paramaters for the Rainmaker app, One is the Motion Sensor which has a parameter by the name of Motion_Parameter so whenever the motion is detected it will return and update the Value "1" otherwise "0".
 
