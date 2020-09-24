@@ -82,11 +82,10 @@ This is the callback function from where we will be updating the parameters, it 
 
 > void motion(void *pvParameters)
 
-motion task function
+**motion task **
 
-` for (;;)
-{
-    g_motion = gpio_get_level(MOTION_PIN);
+`for (;;)
+{    g_motion = gpio_get_level(MOTION_PIN);
     if (g_motion == 1)
     {
         ESP_LOGE(TAG, "MOTION DETECTED");
@@ -98,14 +97,12 @@ motion task function
             esp_rmaker_bool(true));
         gpio_set_level(OUTPUT_GPIO, 1);
         vTaskDelay(500 / portTICK_PERIOD_MS);
+    }else
+    { gpio_set_level(LED, 0);
+      esp_rmaker_param_update_and_report(Motion_Parameter, esp_rmaker_int(g_motion));
+      vTaskDelay(500 / portTICK_PERIOD_MS);
     }
-    else
-    {
-        gpio_set_level(LED, 0);
-        esp_rmaker_param_update_and_report(Motion_Parameter, esp_rmaker_int(g_motion));
-        vTaskDelay(500 / portTICK_PERIOD_MS);
-    }
-} ` 
+}` 
 
 Here we have defined the motion Task, we are using FreeRTOS in this program to run this motion task on a different core so that it will continously scan for the motion and when the motion is detected it will update the values on the rainmaker mobile app.
 
@@ -156,13 +153,22 @@ vTaskDelay(5000 / portTICK_PERIOD_MS); abort();}`
 
 Now we need to initialise the Node so that the Rainmaker Mobile app will recognize our device. It is used to define the Name and type of our device.
 
-`motion_sensor_device = esp_rmaker_device_create("Motion Sensor", "Sensor", a);
-Motion_Parameter = esp_rmaker_param_create("Motion", "Value", esp_rmaker_int(g_motion), PROP_FLAG_READ);
-esp_rmaker_device_add_param(motion_sensor_device, Motion_Parameter);
-esp_rmaker_device_assign_primary_param(motion_sensor_device, Motion_Parameter);
-esp_rmaker_node_add_device(node, motion_sensor_device);
 
-switch_device = esp_rmaker_switch_device_create("Switch", NULL, DEFAULT_POWER);
+`motion_sensor_device = esp_rmaker_device_create("Motion Sensor", "Sensor", a);`
+
+Used this fucntion to create a new device
+
+`Motion_Parameter = esp_rmaker_param_create("Motion", "Value", esp_rmaker_int(g_motion), PROP_FLAG_READ);`
+
+Here We've defined the parameters and it's properties 
+
+`esp_rmaker_device_add_param(motion_sensor_device, Motion_Parameter);
+esp_rmaker_device_assign_primary_param(motion_sensor_device, Motion_Parameter);
+esp_rmaker_node_add_device(node, motion_sensor_device);`
+
+Assigned Parameter to the newly created device and Added the device to the Node.
+
+`switch_device = esp_rmaker_switch_device_create("Switch", NULL, DEFAULT_POWER);
 esp_rmaker_device_add_cb(switch_device, write_cb, NULL);
 esp_rmaker_node_add_device(node, switch_device);`
 
