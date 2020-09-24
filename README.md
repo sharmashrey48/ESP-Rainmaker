@@ -84,9 +84,10 @@ Initializing the callback funtion
     
 This is the callback function from where we will be updating the parameters, it is similar to callback function that we use in PubSubClient.h library to receive the data over MQTT. Here we will be receiving the values from the ESP-Rainmaker mobile app and we will be updating the changes in the device according to the values received. 
 
-`void motion(void *pvParameters)
-{
-    for (;;)
+`void motion(void *pvParameters)` 
+**motion task function**
+
+    `for (;;)
     {
         g_motion = gpio_get_level(MOTION_PIN);
         if (g_motion == 1)
@@ -107,8 +108,7 @@ This is the callback function from where we will be updating the parameters, it 
             esp_rmaker_param_update_and_report(Motion_Parameter, esp_rmaker_int(g_motion));
             vTaskDelay(500 / portTICK_PERIOD_MS);
         }
-    }
-}` 
+    }` 
 
 Here we have defined the **motion** Task, we are using FreeRTOS in this program to run this motion task on a different core so that it will continously scan for the motion and when the motion is detected it will update the values on the rainmaker mobile app. 
 
@@ -152,19 +152,16 @@ Here we need to initialise the Non Volatile Stograge partition to store our Wifi
 With this fucntion we are initialising the Wifi and this process must be done before initialising the ESP-Rainmaker. 
 
 
-`esp_rmaker_config_t rainmaker_cfg = {
-        .enable_time_sync = false,
-    };`
+`esp_rmaker_config_t rainmaker_cfg = {.enable_time_sync = false, };`
     
 Now we need to define the configuration for ESP-Rainmaker, this config is used to synchronise the time. If it is true it will fetch the time from SNTP (Simple Network Time Protocol) before initializing the ESP-Rainmaker. 
 
 `esp_rmaker_node_t *node = esp_rmaker_node_init(&rainmaker_cfg, "ESP RainMaker Motion Sensor", "Motion Sensor");
-    if (!node)
-    {
-        ESP_LOGE(TAG, "Could not initialise node. Aborting!!!");
-        vTaskDelay(5000 / portTICK_PERIOD_MS);
-        abort();
-    }`
+    if (!node){
+     ESP_LOGE(TAG, "Could not initialise node. Aborting!!!");
+     vTaskDelay(5000 / portTICK_PERIOD_MS);
+     abort();}`
+
 Now we need to initialise the Node so that the Rainmaker Mobile app will recognize our device. It is used to define the Name and type of our device. 
 
     `motion_sensor_device = esp_rmaker_device_create("Motion Sensor", "Sensor", a);
