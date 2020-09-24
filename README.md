@@ -11,16 +11,27 @@ we can also control the LED from the Rainmaker mobile app.
 ### Open the app_main.c file and you'll find the source code for the project
 
 `#include <string.h>`
+
 `#include <freertos/FreeRTOS.h>`
+
 `#include <freertos/task.h>`
+
 `#include <esp_log.h>`
+
 `#include <nvs_flash.h>`
+
 `#include <sdkconfig.h>`
+
 `#include <esp_rmaker_core.h>`
+
 `#include <esp_rmaker_standard_params.h>`
+
 `#include <esp_rmaker_standard_devices.h>`
+
 `#include <app_wifi.h>`
+
 `#include <driver/gpio.h>`
+
 `#include "app_priv.h"`
 
 Here we need to define all the library files that are required for our project. 
@@ -48,9 +59,10 @@ Here we need to define all the library files that are required for our project.
 Here we've defined all the variables that are required in the program. 
 
 `static esp_err_t write_cb(const esp_rmaker_device_t *device, const esp_rmaker_param_t *param,
-                          const esp_rmaker_param_val_t val, void *priv_data, esp_rmaker_write_ctx_t *ctx)
-{
-    if (strcmp(esp_rmaker_param_get_name(param), "power") == 0)
+                          const esp_rmaker_param_val_t val, void *priv_data, esp_rmaker_write_ctx_t *ctx)`
+`{
+
+if (strcmp(esp_rmaker_param_get_name(param), "power") == 0)
     {
         ESP_LOGI(TAG, "Received value = %s for %s - %s",
                  val.val.b ? "true" : "false", esp_rmaker_device_get_name(device),
@@ -70,7 +82,8 @@ Here we've defined all the variables that are required in the program.
         esp_rmaker_param_update_and_report(param, val);
     }
     return ESP_OK;
-}`
+`
+    
 This is the callback function from where we will be updating the parameters, it is similar to callback function that we use in PubSubClient.h library to receive the data over MQTT. Here we will be receiving the values from the ESP-Rainmaker mobile app and we will be updating the changes in the device according to the values received. 
 
 `void motion(void *pvParameters)
