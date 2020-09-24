@@ -36,23 +36,14 @@ Open the app_main.c file and you'll find the source code for the project
 Here we need to define all the library files that are required for our project.
 
 > #define MOTION_PIN 34
-
 > #define LED 2
-
 > #define OUTPUT_GPIO 26
-
 > static bool g_power_state = DEFAULT_POWER;
-
 > static const char *TAG = "app_main";
-
 > static int g_motion = DEFAULT_MOTION;
-
 > esp_rmaker_device_t *switch_device;
-
 > esp_rmaker_device_t *motion_sensor_device;
-
 > esp_rmaker_param_t *Motion_Parameter;
-
 > void *a = &g_motion;
 
 Here we've defined all the variables that are required in the program.
@@ -82,7 +73,7 @@ This is the callback function from where we will be updating the parameters, it 
 
 > void motion(void *pvParameters)
 
-**motion task**
+**motion task for continous motion detection**
 
 `for (;;)` 
 
@@ -108,10 +99,9 @@ If the motion is detected, i.e. g_motion is 1 then,
 
 Turn on the Built-in LED and External LED and update the parameters on the Rainmaker App. 
 
-`else{
-gpio_set_level(LED, 0);
-esp_rmaker_param_update_and_report(Motion_Parameter, esp_rmaker_int(g_motion));
-vTaskDelay(500 / portTICK_PERIOD_MS);
+`else{gpio_set_level(LED, 0);`
+ ` esp_rmaker_param_update_and_report(Motion_Parameter, esp_rmaker_int(g_motion));`
+  `vTaskDelay(500 / portTICK_PERIOD_MS);
  }` 
 
 Else turn OFF the Buil-in LED and update the Motion_Parameter on the Rainmaker App.
