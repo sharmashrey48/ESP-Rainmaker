@@ -36,14 +36,23 @@ Open the app_main.c file and you'll find the source code for the project
 Here we need to define all the library files that are required for our project.
 
 > #define MOTION_PIN 34
+
 > #define LED 2
+
 > #define OUTPUT_GPIO 26
+
 > static bool g_power_state = DEFAULT_POWER;
+
 > static const char *TAG = "app_main";
+
 > static int g_motion = DEFAULT_MOTION;
+
 > esp_rmaker_device_t *switch_device;
+
 > esp_rmaker_device_t *motion_sensor_device;
+
 > esp_rmaker_param_t *Motion_Parameter;
+
 > void *a = &g_motion;
 
 Here we've defined all the variables that are required in the program.
@@ -52,7 +61,10 @@ Here we've defined all the variables that are required in the program.
 
 Initializing the callback funtion
 
-`if (strcmp(esp_rmaker_param_get_name(param), "power") == 0) { ESP_LOGI(TAG, "Received value = %s for %s - %s", val.val.b ? "true" : "false", esp_rmaker_device_get_name(device),esp_rmaker_param_get_name(param));`
+`if (strcmp(esp_rmaker_param_get_name(param), "power") == 0) 
+{ 
+ESP_LOGI(TAG, "Received value = %s for %s - %s", val.val.b ? "true" : "false",esp_rmaker_device_get_name(device),esp_rmaker_param_get_name(param));
+}`
 
     `if (val.val.b == true)
     {
@@ -99,10 +111,11 @@ If the motion is detected, i.e. g_motion is 1 then,
 
 Turn on the Built-in LED and External LED and update the parameters on the Rainmaker App. 
 
-`else{gpio_set_level(LED, 0);`
- ` esp_rmaker_param_update_and_report(Motion_Parameter, esp_rmaker_int(g_motion));`
-  `vTaskDelay(500 / portTICK_PERIOD_MS);
- }` 
+` else{gpio_set_level(LED, 0);
+{
+ esp_rmaker_param_update_and_report(Motion_Parameter, esp_rmaker_int(g_motion));
+ vTaskDelay(500 / portTICK_PERIOD_MS);
+ } ` 
 
 Else turn OFF the Buil-in LED and update the Motion_Parameter on the Rainmaker App.
 
@@ -123,6 +136,7 @@ Here we are configuring the GPIO Pins and selecting the INPUT and OUTPUT Modes f
 
 This is FreeRTOS Task create function that will create a task and pin it to a specific core, so that we can utilize both the cores on the ESP32. Here we have some parameters, let's have a look at them.
 
+
 - pvTaskCode : This is the task entry function and it must not return any value.
 - TaskName : A descriptive name for the task
 - StackDepth : Here we need to define the size of stack in number of bytes.
@@ -130,6 +144,7 @@ This is FreeRTOS Task create function that will create a task and pin it to a sp
 - uxPriority : Here we need to define the priority of the task that we just created.
 - pvCreatedTask : used to pass back a handle by which created task can be referenced.
 - xCoreID : Here we will define the core on which we want to run our task.
+
 
 Till Now we've defined all the basic things and now it is time to start working on the ESP-Rainmaker.
 
@@ -151,12 +166,11 @@ With this fucntion we are initialising the Wifi and this process must be done be
 
 Now we need to define the configuration for ESP-Rainmaker, this config is used to synchronise the time. If it is true it will fetch the time from SNTP (Simple Network Time Protocol) before initializing the ESP-Rainmaker.
 
-`esp_rmaker_node_t *node = esp_rmaker_node_init(&rainmaker_cfg, "ESP RainMaker Motion Sensor", "Motion Sensor");
-if (!node)
-{
+` esp_rmaker_node_t *node = esp_rmaker_node_init(&rainmaker_cfg, "ESP RainMaker Motion Sensor", "Motion Sensor");
+if (!node){
 ESP_LOGE(TAG, "Could not initialise node. Aborting!!!");
 vTaskDelay(5000 / portTICK_PERIOD_MS); abort();
-}`
+} `
 
 Now we need to initialise the Node so that the Rainmaker Mobile app will recognize our device. It is used to define the Name and type of our device.
 
