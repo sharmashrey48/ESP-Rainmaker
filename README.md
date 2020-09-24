@@ -82,27 +82,39 @@ This is the callback function from where we will be updating the parameters, it 
 
 > void motion(void *pvParameters)
 
-**motion task **
+**motion task**
 
-`for (;;)
-{    g_motion = gpio_get_level(MOTION_PIN);
-    if (g_motion == 1)
-    {
-        ESP_LOGE(TAG, "MOTION DETECTED");
+`for (;;)` 
+
+Starting an Infinite loop 
+
+`g_motion = gpio_get_level(MOTION_PIN);` 
+
+Reading the Digital Input from the GPIO PIN and Storing the data into g_motion variable.
+
+> if (g_motion == 1)
+
+If the motion is detected, i.e. g_motion is 1 then, 
+
+        `ESP_LOGE(TAG, "MOTION DETECTED");
         printf("Turning on LED\n");
         gpio_set_level(LED, 1);
         esp_rmaker_param_update_and_report(Motion_Parameter, esp_rmaker_int(g_motion));
         esp_rmaker_param_update_and_report(
-            esp_rmaker_device_get_param_by_name(switch_device, "power"),
-            esp_rmaker_bool(true));
+        esp_rmaker_device_get_param_by_name(switch_device, "power"),
+        esp_rmaker_bool(true));
         gpio_set_level(OUTPUT_GPIO, 1);
-        vTaskDelay(500 / portTICK_PERIOD_MS);
-    }else
-    { gpio_set_level(LED, 0);
-      esp_rmaker_param_update_and_report(Motion_Parameter, esp_rmaker_int(g_motion));
-      vTaskDelay(500 / portTICK_PERIOD_MS);
-    }
-}` 
+        vTaskDelay(500 / portTICK_PERIOD_MS);` 
+
+Turn on the Built-in LED and External LED and update the parameters on the Rainmaker App. 
+
+ `else
+{ gpio_set_level(LED, 0);
+ esp_rmaker_param_update_and_report(Motion_Parameter, esp_rmaker_int(g_motion));
+ vTaskDelay(500 / portTICK_PERIOD_MS);
+ }` 
+
+Else turn OFF the Buil-in LED and update the Motion_Parameter on the Rainmaker App.
 
 Here we have defined the motion Task, we are using FreeRTOS in this program to run this motion task on a different core so that it will continously scan for the motion and when the motion is detected it will update the values on the rainmaker mobile app.
 
@@ -133,7 +145,7 @@ Till Now we've defined all the basic things and now it is time to start working 
 
 `esp_err_t err = nvs_flash_init(); 
 if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) 
-{ ESP_ERROR_CHECK(nvs_flash_erase()); 
+{ESP_ERROR_CHECK(nvs_flash_erase()); 
 err = nvs_flash_init(); } 
 ESP_ERROR_CHECK(err);`
 
