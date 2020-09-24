@@ -85,6 +85,7 @@ Initializing the callback funtion
 This is the callback function from where we will be updating the parameters, it is similar to callback function that we use in PubSubClient.h library to receive the data over MQTT. Here we will be receiving the values from the ESP-Rainmaker mobile app and we will be updating the changes in the device according to the values received. 
 
 `void motion(void *pvParameters)` 
+
 **motion task function**
 
     `for (;;)
@@ -114,7 +115,7 @@ Here we have defined the **motion** Task, we are using FreeRTOS in this program 
 
   > Now let's start the app_main() function. 
   
-  ` gpio_pad_select_gpio(LED);
+  `gpio_pad_select_gpio(LED);
     gpio_set_direction(LED, GPIO_MODE_OUTPUT);
     gpio_pad_select_gpio(MOTION_PIN);
     gpio_set_direction(MOTION_PIN, GPIO_MODE_INPUT);
