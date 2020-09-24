@@ -75,6 +75,7 @@ Initializing the callback funtion
     }
 
     esp_rmaker_param_update_and_report(param, val);`
+
 Matching the values received from the mobile app and if the value is ture, then turn on the switch and if it is false, then turn off the switch.
 
 This is the callback function from where we will be updating the parameters, it is similar to callback function that we use in PubSubClient.h library to receive the data over MQTT. Here we will be receiving the values from the ESP-Rainmaker mobile app and we will be updating the changes in the device according to the values received.
@@ -83,7 +84,7 @@ This is the callback function from where we will be updating the parameters, it 
 
 motion task function
 
-`for (;;)
+` for (;;)
 {
     g_motion = gpio_get_level(MOTION_PIN);
     if (g_motion == 1)
@@ -104,7 +105,7 @@ motion task function
         esp_rmaker_param_update_and_report(Motion_Parameter, esp_rmaker_int(g_motion));
         vTaskDelay(500 / portTICK_PERIOD_MS);
     }
-}` 
+} ` 
 
 Here we have defined the motion Task, we are using FreeRTOS in this program to run this motion task on a different core so that it will continously scan for the motion and when the motion is detected it will update the values on the rainmaker mobile app.
 
@@ -123,13 +124,13 @@ Here we are configuring the GPIO Pins and selecting the INPUT and OUTPUT Modes f
 
 This is FreeRTOS Task create function that will create a task and pin it to a specific core, so that we can utilize both the cores on the ESP32. Here we have some parameters, let's have a look at them.
 
-pvTaskCode : This is the task entry function and it must not return any value.
-TaskName : A descriptive name for the task
-StackDepth : Here we need to define the size of stack in number of bytes.
-pvParameters : Pointers that will be used as a parameter for the task that we have already created.
-uxPriority : Here we need to define the priority of the task that we just created.
-pvCreatedTask : used to pass back a handle by which created task can be referenced.
-xCoreID : Here we will define the core on which we want to run our task.
+- pvTaskCode : This is the task entry function and it must not return any value.
+- TaskName : A descriptive name for the task
+- StackDepth : Here we need to define the size of stack in number of bytes.
+- pvParameters : Pointers that will be used as a parameter for the task that we have already created.
+- uxPriority : Here we need to define the priority of the task that we just created.
+- pvCreatedTask : used to pass back a handle by which created task can be referenced.
+- xCoreID : Here we will define the core on which we want to run our task.
 
 Till Now we've defined all the basic things and now it is time to start working on the ESP-Rainmaker.
 
