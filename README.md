@@ -111,11 +111,11 @@ If the motion is detected, i.e. g_motion is 1 then,
 
 Turn on the Built-in LED and External LED and update the parameters on the Rainmaker App. 
 
-` else{gpio_set_level(LED, 0);
-{
- esp_rmaker_param_update_and_report(Motion_Parameter, esp_rmaker_int(g_motion));
- vTaskDelay(500 / portTICK_PERIOD_MS);
- } ` 
+    `else{gpio_set_level(LED, 0);
+    {
+     esp_rmaker_param_update_and_report(Motion_Parameter, esp_rmaker_int(g_motion));
+    vTaskDelay(500 / portTICK_PERIOD_MS);
+    }` 
 
 Else turn OFF the Buil-in LED and update the Motion_Parameter on the Rainmaker App.
 
@@ -124,11 +124,11 @@ Here we have defined the motion Task, we are using FreeRTOS in this program to r
 Now let's start the **app_main()** function.
 
     `gpio_pad_select_gpio(LED);
-    gpio_set_direction(LED, GPIO_MODE_OUTPUT);
-    gpio_pad_select_gpio(MOTION_PIN);
-    gpio_set_direction(MOTION_PIN, GPIO_MODE_INPUT);
-    gpio_pad_select_gpio(OUTPUT_GPIO);
-    gpio_set_direction(OUTPUT_GPIO, GPIO_MODE_OUTPUT);`
+     gpio_set_direction(LED, GPIO_MODE_OUTPUT);
+     gpio_pad_select_gpio(MOTION_PIN);
+     gpio_set_direction(MOTION_PIN, GPIO_MODE_INPUT);
+     gpio_pad_select_gpio(OUTPUT_GPIO);
+     gpio_set_direction(OUTPUT_GPIO, GPIO_MODE_OUTPUT);`
 
 Here we are configuring the GPIO Pins and selecting the INPUT and OUTPUT Modes for the pins that we will be using, for the Motion sensor we will be using the INPUT mode because the sensot will only take the input from the surrounding and update it on the app and for LEDs we are using OUTPUT mode because we want to take the action on the board itself and obviously, the LED is an OUTPUT device.
 
@@ -148,7 +148,7 @@ This is FreeRTOS Task create function that will create a task and pin it to a sp
 
 Till Now we've defined all the basic things and now it is time to start working on the ESP-Rainmaker.
 
-`   esp_err_t err = nvs_flash_init();
+    `esp_err_t err = nvs_flash_init();
     if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND)
     {
     ESP_ERROR_CHECK(nvs_flash_erase());
@@ -176,23 +176,23 @@ Now we need to define the configuration for ESP-Rainmaker, this config is used t
 Now we need to initialise the Node so that the Rainmaker Mobile app will recognize our device. It is used to define the Name and type of our device.
 
 
-`motion_sensor_device = esp_rmaker_device_create("Motion Sensor", "Sensor", a);`
+    `motion_sensor_device = esp_rmaker_device_create("Motion Sensor", "Sensor", a);`
 
 Used this fucntion to create a new device
 
-`Motion_Parameter = esp_rmaker_param_create("Motion", "Value", esp_rmaker_int(g_motion), PROP_FLAG_READ);`
+    `Motion_Parameter = esp_rmaker_param_create("Motion", "Value", esp_rmaker_int(g_motion), PROP_FLAG_READ);`
 
 Here We've defined the parameters and it's properties 
 
     `esp_rmaker_device_add_param(motion_sensor_device, Motion_Parameter);
-    esp_rmaker_device_assign_primary_param(motion_sensor_device, Motion_Parameter);
-    esp_rmaker_node_add_device(node, motion_sensor_device);`
+     esp_rmaker_device_assign_primary_param(motion_sensor_device, Motion_Parameter);
+     esp_rmaker_node_add_device(node, motion_sensor_device);`
 
 Assigned Parameter to the newly created device and Added the device to the Node.
 
     `switch_device = esp_rmaker_switch_device_create("Switch", NULL, DEFAULT_POWER);
-    esp_rmaker_device_add_cb(switch_device, write_cb, NULL);
-    esp_rmaker_node_add_device(node, switch_device);`
+     esp_rmaker_device_add_cb(switch_device, write_cb, NULL);
+     esp_rmaker_node_add_device(node, switch_device);`
 
 Here we have created two device and defined their paramaters for the Rainmaker app, One is the Motion Sensor which has a parameter by the name of Motion_Parameter so whenever the motion is detected it will return and update the Value "1" otherwise "0".
 
