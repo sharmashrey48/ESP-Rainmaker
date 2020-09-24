@@ -24,36 +24,27 @@ Open the app_main.c file and you'll find the source code for the project
 
 Here we need to define all the library files that are required for our project.
 
-> #define MOTION_PIN 34
-
-> #define LED 2
-
-> #define OUTPUT_GPIO 26
-
-> static bool g_power_state = DEFAULT_POWER;
-
-> static const char *TAG = "app_main";
-
-> static int g_motion = DEFAULT_MOTION;
-
-> esp_rmaker_device_t *switch_device;
-
-> esp_rmaker_device_t *motion_sensor_device;
-
-> esp_rmaker_param_t *Motion_Parameter;
-
-> void *a = &g_motion;
+    `#define MOTION_PIN 34
+     #define LED 2
+     #define OUTPUT_GPIO 26
+     static bool g_power_state = DEFAULT_POWER;
+     static const char *TAG = "app_main";
+     static int g_motion = DEFAULT_MOTION;
+     esp_rmaker_device_t *switch_device;
+     esp_rmaker_device_t *motion_sensor_device;
+     esp_rmaker_param_t *Motion_Parameter;
+     void *a = &g_motion;
 
 Here we've defined all the variables that are required in the program.
 
-`static esp_err_t write_cb(const esp_rmaker_device_t *device, const esp_rmaker_param_t *param,const esp_rmaker_param_val_t val, void *priv_data, esp_rmaker_write_ctx_t *ctx)`
+    `static esp_err_t write_cb(const esp_rmaker_device_t *device, const esp_rmaker_param_t *param,const esp_rmaker_param_val_t val, void *priv_data, esp_rmaker_write_ctx_t *ctx)`
 
 Initializing the callback funtion
 
-`if (strcmp(esp_rmaker_param_get_name(param), "power") == 0) 
-{ 
-ESP_LOGI(TAG, "Received value = %s for %s - %s", val.val.b ? "true" : "false",esp_rmaker_device_get_name(device),esp_rmaker_param_get_name(param));
-}`
+    `if (strcmp(esp_rmaker_param_get_name(param), "power") == 0) 
+        { 
+        ESP_LOGI(TAG, "Received value = %s for %s - %s", val.val.b ? "true" : "false",esp_rmaker_device_get_name(device),esp_rmaker_param_get_name(param));
+        }`
 
     `if (val.val.b == true)
     {
