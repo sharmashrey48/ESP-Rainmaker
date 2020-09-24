@@ -10,7 +10,7 @@ we can also control the LED from the Rainmaker mobile app.
 
 ### Open the app_main.c file and you'll find the source code for the project
 
-`#include <string.h>`
+`#include <string.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <esp_log.h>
