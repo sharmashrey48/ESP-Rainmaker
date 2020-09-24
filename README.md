@@ -11,16 +11,27 @@ we can also control the LED from the Rainmaker mobile app.
 ### Open the app_main.c file and you'll find the source code for the project
 
 >#include <string.h>
+
 >#include <freertos/FreeRTOS.h>
+
 >#include <freertos/task.h>
+
 >#include <esp_log.h>
+
 >#include <nvs_flash.h>
+
 >#include <sdkconfig.h>
+
 >#include <esp_rmaker_core.h>
+
 >#include <esp_rmaker_standard_params.h>
+
 >#include <esp_rmaker_standard_devices.h>
+
 >#include <app_wifi.h>
+
 >#include <driver/gpio.h>
+
 >#include "app_priv.h"
 
 Here we need to define all the library files that are required for our project. 
